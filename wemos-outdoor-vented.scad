@@ -1,30 +1,32 @@
-// A small case for a wemos mini and a temp sensor appropriate for outside use.
-// The sensor is intended to be mounted in with the positive y up to
+// A small case for a wemos mini and a temp sensor appropriate for outside use not in
+// direct rain. The case is intended to be mounted in with the positive y up to
 // keep rain from entering the cavities.
 
-// Size of a wemos d1 mini
+// Size of a wemos d1 mini and sensor
 wemos_x=26;
 wemos_y=35;
-sense_y=25;
+wemos_z=12;
+sense_y=30;
 
-// side (y) wall thickness; needs to be thick enough to allow for holes
+// opening for a usb plug
+usb_w=14;
+usb_h=8;
+
+// louvered (y) wall thickness; needs to be thick enough to allow for holes
 // that can keep mist/rain out
 yt=3;
 
-// horizontal wall thickness
+// non-louvered wall thickness (horizontal and back surfaces)
 xt=2;
 
 // Overall dimenstions of the outside of the case
 case_x = wemos_x + 5 + 2*yt;
 case_y = wemos_y + sense_y + 3 * xt;
-case_z = 18;
-
-usb_w=14;
-usb_h=8;
+case_z = wemos_z + xt + yt;
+echo("case:", case_x, case_y, case_z);
 
 $fs = 0.1;  // Don't generate smaller facets than 0.1 mm
 $fa = 5;    // Don't generate larger angles than 5 degrees
-
 
 module case() {
    module side_vent(d) {
@@ -50,16 +52,16 @@ module case() {
             cube([wemos_x-3, 4, 2.3]);
          
          // wall between wemos and sensor cavity
-         translate([0, wemos_y, 0])
+         translate([0, wemos_y+xt, 0])
             cube([case_x, xt, case_z-yt]);
 
          // The mouting boss
-         translate([case_x/2, wemos_y+xt+(od+2)/2+2, 0])
+         translate([case_x/2, wemos_y+xt+(od+2)/2+4, 0])
             cylinder(h=bt, d=od+2, $fn=100);
       }
       union() {
          // opening into sensor cavity
-         translate([4, wemos_y-1, 6])
+         translate([4, wemos_y-1+xt, 6])
             cube([4, 4, 20]);
          // And the usb port
          translate([case_x/2 - usb_w/2, -1, xt+0.01])
@@ -68,10 +70,10 @@ module case() {
          translate([yt-1.5-0.125, xt-0.5, case_z-yt])
             lid(case_x-3+0.25, case_y-xt+2, yt+0.1, v=0);
          // The screwhole in the mounting boss
-         translate([case_x/2, wemos_y+xt+(od+2)/2+2, -0.1])
+         translate([case_x/2, wemos_y+xt+(od+2)/2+4, -0.1])
             cylinder(h=bt+1, d=id*shsf, $fn=100);
          // and the countersink
-         translate([case_x/2, wemos_y+xt+(od+2)/2+2, bt-3+0.1])
+         translate([case_x/2, wemos_y+xt+(od+2)/2+4, bt-3+0.1])
             cylinder(h=3, d1=id*shsf, d2=od*shsf, $fn=100);
         // side vent slots for the sensor section
         for(y=[wemos_y+xt+1:5:case_y-8])
