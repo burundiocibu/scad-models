@@ -1,7 +1,6 @@
 /*                                                 -*- c++ -*-
  * A Bahtinov mask generator.
- * Units in mm, default values are for
- * a Celestron NexStar GPS 8.
+ * Units in mm, 
  *
  * Copyright 2013-2014, Brent Burton
  * License: CC-BY-SA
@@ -10,7 +9,7 @@
  * Updated: 2019-11-09 - increased center diameter limit to 120.
  */
 
-tubeOuterDiameter = 117; // [80:400]
+tubeOuterDiameter = 117.5; // [80:400]
 
 sideThickness = 2;
 
@@ -95,6 +94,9 @@ module sleeve() {
    }
 }
 
-linear_extrude(height=2) bahtinov2D();
-translate([0,0,0])
-   sleeve();
+union() {
+   
+   linear_extrude(height=2) bahtinov2D();
+   translate([0,0,2])
+      sleeve();
+}
