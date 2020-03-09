@@ -148,5 +148,5 @@ module mounting_ear() {
 }
 
 
-case();
+//case();
 translate([50,0,0]) lid(case_x-3, case_y-xt, yt, v=1);
